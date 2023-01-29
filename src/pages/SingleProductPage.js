@@ -16,7 +16,7 @@ import { Link } from "react-router-dom";
 
 const SingleProductPage = () => {
   const { id } = useParams();
-  const navigate = useHistory();
+  const history = useHistory();
   const {
     single_product_loading: loading,
     single_product_error: error,
@@ -28,20 +28,21 @@ const SingleProductPage = () => {
     fetchSingleProduct(`s${url}${id}`);
     console.log(product);
   }, [id]);
-  useEffect(() => {
-    if (error) {
-      setTimeout(() => {
-        navigate("/");
-      }, 3000);
-    }
-    // eslint-disable-next-line
-  }, [error]);
+  // useEffect(() => {
+  //   console.log(error);
+  //   if (error) {
+  //     setTimeout(() => {
+  //       history.push("/");
+  //     }, 3000);
+  //   }
+  //   // eslint-disable-next-line
+  // }, [error]);
   if (loading) {
     return <Loading />;
   }
-  if (error) {
-    return <Error />;
-  }
+  // if (error) {
+  //   return <Error />;
+  // }
   return <h4>single product page</h4>;
 };
 
