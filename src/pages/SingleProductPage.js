@@ -27,6 +27,13 @@ const SingleProductPage = () => {
     fetchSingleProduct(`${url}${id}`);
     // eslint-disable-next-line
   }, [id]);
+
+  if (loading) {
+    return <Loading />;
+  }
+  if (error) {
+    <Error />;
+  }
   return <h4>single product page</h4>;
 };
 
