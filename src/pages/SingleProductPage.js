@@ -16,6 +16,7 @@ import { Link } from "react-router-dom";
 
 const SingleProductPage = () => {
   const { id } = useParams();
+  const navigate = useHistory();
   const {
     single_product_loading: loading,
     single_product_error: error,
@@ -24,15 +25,22 @@ const SingleProductPage = () => {
   } = useProductsContext();
 
   useEffect(() => {
-    fetchSingleProduct(`${url}${id}`);
-    // eslint-disable-next-line
+    fetchSingleProduct(`s${url}${id}`);
+    console.log(product);
   }, [id]);
-
+  useEffect(() => {
+    if (error) {
+      setTimeout(() => {
+        navigate("/");
+      }, 3000);
+    }
+    // eslint-disable-next-line
+  }, [error]);
   if (loading) {
     return <Loading />;
   }
   if (error) {
-    <Error />;
+    return <Error />;
   }
   return <h4>single product page</h4>;
 };
