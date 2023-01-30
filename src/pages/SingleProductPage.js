@@ -13,10 +13,9 @@ import {
 } from "../components";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-
 const SingleProductPage = () => {
   const { id } = useParams();
-  const history = useHistory();
+  const navigate = useHistory();
   const {
     single_product_loading: loading,
     single_product_error: error,
@@ -25,25 +24,68 @@ const SingleProductPage = () => {
   } = useProductsContext();
 
   useEffect(() => {
-    fetchSingleProduct(`s${url}${id}`);
-    console.log(product);
+    fetchSingleProduct(`${url}${id}`);
+    // eslint-disable-next-line
   }, [id]);
-  // useEffect(() => {
-  //   console.log(error);
-  //   if (error) {
-  //     setTimeout(() => {
-  //       history.push("/");
-  //     }, 3000);
-  //   }
-  //   // eslint-disable-next-line
-  // }, [error]);
+  useEffect(() => {
+    if (error) {
+      setTimeout(() => {
+        navigate("/");
+      }, 3000);
+    }
+    // eslint-disable-next-line
+  }, [error]);
   if (loading) {
     return <Loading />;
   }
-  // if (error) {
-  //   return <Error />;
-  // }
-  return <h4>single product page</h4>;
+  if (error) {
+    return <Error />;
+  }
+
+  const {
+    name,
+    price,
+    description,
+    stock,
+    stars,
+    reviews,
+    id: sku,
+    company,
+    images,
+  } = product;
+  return (
+    <Wrapper>
+      <PageHero title={name} product />
+      <div className="section section-center page">
+        <Link to="/products" className="btn">
+          back to products
+        </Link>
+        <div className="product-center">
+          <ProductImages images={images} />
+          <section className="content">
+            <h2>{name}</h2>
+            <Stars stars={stars} reviews={reviews} />
+            <h5 className="price">{formatPrice(price)}</h5>
+            <p className="desc">{description}</p>
+            <p className="info">
+              <span>Available : </span>
+              {stock > 0 ? "In stock" : "out of stock"}
+            </p>
+            <p className="info">
+              <span>SKU :</span>
+              {sku}
+            </p>
+            <p className="info">
+              <span>Brand :</span>
+              {company}
+            </p>
+            <hr />
+            {stock > 0 && <AddToCart product={product} />}
+          </section>
+        </div>
+      </div>
+    </Wrapper>
+  );
 };
 
 const Wrapper = styled.main`
@@ -68,7 +110,6 @@ const Wrapper = styled.main`
       font-weight: 700;
     }
   }
-
   @media (min-width: 992px) {
     .product-center {
       grid-template-columns: 1fr 1fr;
